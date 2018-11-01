@@ -35,11 +35,11 @@ public class Move : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        RaycastHit hit = new RaycastHit();
-
         if (moving)
         {
-            if(transform.position != endPosition)
+            RaycastHit hit = new RaycastHit();
+
+            if (transform.position != endPosition)
             {
                 float distCovered = (Time.time - startTime) * speed;
                 float fracDistance = distCovered / onTile.GetComponent<Renderer>().bounds.size.z;
@@ -56,9 +56,9 @@ public class Move : MonoBehaviour {
                 moving = false;
             }
         }
-        else if(rotating)
+        else if (rotating)
         {
-            if(Math.Round(transform.eulerAngles.y) != Math.Round(endPosition.y))
+            if (Math.Round(transform.eulerAngles.y) != Math.Round(endPosition.y))
             {
                 float distCovered = (Time.time - startTime) * speed * 15;
                 float fracDistance = distCovered / 90.0F;
@@ -71,90 +71,137 @@ public class Move : MonoBehaviour {
                 rotating = false;
             }
         }
-        else
+        else if (Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.UpArrow))
         {
-            if (Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.UpArrow))
-            {
-                if (!Physics.Raycast(transform.position, transform.forward, out hit, onTile.GetComponent<Renderer>().bounds.size.z))
-                {
-                    startPosition = transform.position;
-                    endPosition = transform.position + transform.forward * onTile.GetComponent<Renderer>().bounds.size.z;
-                    startTime = Time.time;
+            StepForward();
+        }
+        else if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        {
+            StepBack();
+        }
+        else if(Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            StepLeft();
+        }
+        else if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        {
+            StepRight();
+        }
+        else if(Input.GetKey(KeyCode.A))
+        {
+            TurnLeft();
+        }
+        else if(Input.GetKey(KeyCode.E))
+        {
+            TurnRight();
+        }
 
-                    moving = true;
-                }
-            }
-            else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-            {
-                if (!Physics.Raycast(transform.position, -transform.forward, out hit, onTile.GetComponent<Renderer>().bounds.size.z))
-                {
-                    startPosition = transform.position;
-                    endPosition = transform.position - transform.forward * onTile.GetComponent<Renderer>().bounds.size.z;
-                    startTime = Time.time;
 
-                    moving = true;
-                }
-            }
-            else if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow))
-            {
-                if (!Physics.Raycast(transform.position, -transform.right, out hit, onTile.GetComponent<Renderer>().bounds.size.x))
-                {
-                    startPosition = transform.position;
-                    endPosition = transform.position - transform.right * onTile.GetComponent<Renderer>().bounds.size.x;
-                    startTime = Time.time;
+    }
 
-                    moving = true;
-                }
-            }
-            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-            {
-                if (!Physics.Raycast(transform.position, transform.right, out hit, onTile.GetComponent<Renderer>().bounds.size.x))
-                {
-                    startPosition = transform.position;
-                    endPosition = transform.position + transform.right * onTile.GetComponent<Renderer>().bounds.size.x;
-                    startTime = Time.time;
+    public void StepForward()
+    {
+        if(!moving && !rotating)
+        {
+            RaycastHit hit = new RaycastHit();
 
-                    moving = true;
-                }
-            }
-            else if (Input.GetKey(KeyCode.A))
+            if (!Physics.Raycast(transform.position, transform.forward, out hit, onTile.GetComponent<Renderer>().bounds.size.z))
             {
-                startPosition = transform.eulerAngles;
-                if(transform.eulerAngles.y == 0)
-                {
-                    endPosition = new Vector3(0, transform.eulerAngles.y - 90.0F + 360.0F, 0);
-                }
-                else
-                {
-                    endPosition = new Vector3(0, transform.eulerAngles.y - 90.0F, 0);
-                }
+                startPosition = transform.position;
+                endPosition = transform.position + transform.forward * onTile.GetComponent<Renderer>().bounds.size.z;
                 startTime = Time.time;
 
-                rotating = true;
-            }
-            else if (Input.GetKey(KeyCode.E))
-            {
-                startPosition = transform.eulerAngles;
-                if (transform.eulerAngles.y == 270)
-                {
-                    endPosition = new Vector3(0, transform.eulerAngles.y + 90.0F - 360.0F, 0);
-                }
-                else
-                {
-                    endPosition = new Vector3(0, transform.eulerAngles.y + 90.0F, 0);
-                }
-                startTime = Time.time;
-
-                rotating = true;
+                moving = true;
             }
         }
     }
 
-    void MoveTo(Vector3 startPoint, Vector3 endPoint, float startTime)
+    public void StepBack()
     {
-        float distCovered = (Time.time - startTime) * speed;
-        float fracDistance = distCovered / onTile.GetComponent<Renderer>().bounds.size.z;
+        if (!moving && !rotating)
+        {
+            RaycastHit hit = new RaycastHit();
 
-        transform.position = Vector3.Lerp(startPoint, endPoint, fracDistance);
+            if (!Physics.Raycast(transform.position, -transform.forward, out hit, onTile.GetComponent<Renderer>().bounds.size.z))
+            {
+                startPosition = transform.position;
+                endPosition = transform.position - transform.forward * onTile.GetComponent<Renderer>().bounds.size.z;
+                startTime = Time.time;
+
+                moving = true;
+            }
+        }
+    }
+
+    public void StepLeft()
+    {
+        if (!moving && !rotating)
+        {
+            RaycastHit hit = new RaycastHit();
+
+            if (!Physics.Raycast(transform.position, -transform.right, out hit, onTile.GetComponent<Renderer>().bounds.size.x))
+            {
+                startPosition = transform.position;
+                endPosition = transform.position - transform.right * onTile.GetComponent<Renderer>().bounds.size.x;
+                startTime = Time.time;
+
+                moving = true;
+            }
+        }
+    }
+
+    public void StepRight()
+    {
+        if (!moving && !rotating)
+        {
+            RaycastHit hit = new RaycastHit();
+
+            if (!Physics.Raycast(transform.position, transform.right, out hit, onTile.GetComponent<Renderer>().bounds.size.x))
+            {
+                startPosition = transform.position;
+                endPosition = transform.position + transform.right * onTile.GetComponent<Renderer>().bounds.size.x;
+                startTime = Time.time;
+
+                moving = true;
+            }
+        }
+    }
+
+     public void TurnLeft()
+    {
+        if (!moving && !rotating)
+        {
+            startPosition = transform.eulerAngles;
+            if (transform.eulerAngles.y == 0)
+            {
+                endPosition = new Vector3(0, transform.eulerAngles.y - 90.0F + 360.0F, 0);
+            }
+            else
+            {
+                endPosition = new Vector3(0, transform.eulerAngles.y - 90.0F, 0);
+            }
+            startTime = Time.time;
+
+            rotating = true;
+        }
+    }
+
+    public void TurnRight()
+    {
+        if (!moving && !rotating)
+        {
+            startPosition = transform.eulerAngles;
+            if (transform.eulerAngles.y == 270)
+            {
+                endPosition = new Vector3(0, transform.eulerAngles.y + 90.0F - 360.0F, 0);
+            }
+            else
+            {
+                endPosition = new Vector3(0, transform.eulerAngles.y + 90.0F, 0);
+            }
+            startTime = Time.time;
+
+            rotating = true;
+        }
     }
 }
