@@ -4,16 +4,12 @@ using UnityEngine;
 using System;
 
 public class Move : MonoBehaviour {
-    private GameObject onTile;
+    public GameObject onTile;
     private float speed;
-    [SerializeField]
     private bool moving;
-    [SerializeField]
     private bool rotating;
     private float startTime;
-    [SerializeField]
     private Vector3 startPosition;
-    [SerializeField]
     private Vector3 endPosition;
 
     // Use this for initialization
@@ -71,32 +67,6 @@ public class Move : MonoBehaviour {
                 rotating = false;
             }
         }
-        else if (Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.UpArrow))
-        {
-            StepForward();
-        }
-        else if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-        {
-            StepBack();
-        }
-        else if(Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow))
-        {
-            StepLeft();
-        }
-        else if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        {
-            StepRight();
-        }
-        else if(Input.GetKey(KeyCode.A))
-        {
-            TurnLeft();
-        }
-        else if(Input.GetKey(KeyCode.E))
-        {
-            TurnRight();
-        }
-
-
     }
 
     public void StepForward()

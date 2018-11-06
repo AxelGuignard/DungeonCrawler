@@ -53,6 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\EnemyBehaviour.cs" />
+     <Compile Include="Assets\KeyboardInputHandler.cs" />
      <Compile Include="Assets\Move.cs" />
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>C:/Users/axelg/Documents/DungeonCrawler/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
